@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Inverse-LLaVA: Eliminating Alignment Pre-training Through Text-to-Vision Mapping">
+  <meta name="keywords" content="multimodal, llm, vlm">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inverse-LLaVA</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/954/954591.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Inverse-LLaVA: Eliminating Alignment Pre-training Through Text-to-Vision Mapping</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://xuhuizhan5.github.io/" style="color:#f68946;font-weight:normal;">Xuhui Zhan</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.tylerderr.com/" style="color:#008AD7;font-weight:normal;">Tyler Derr</a>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Vanderbilt University</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2304.12345" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/Inverse-LLaVA/Inverse-LLaVA.github.io" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img id="teaser" width="100%" src="static/images/overview.png">
+        <h4 class="subtitle has-text-centered">
+            High-level overview of the proposed Inverse-LLaVA framework on an MME benchmark example. (a) LLaVA projects visual features into discrete text space via an explicit projection (red), requiring alignment pre-training, and produces the wrong answer (”Yes”). (b) Inverse-LLaVA maps text embeddings into continuous vision space for fusion, eliminating alignment pre-training, and yields the correct answer (”No”). <span style='color:blue'>Blue</span> indicates vision flow, <span style='color:green'>green</span> indicates text flow, <span style='color:red'>red</span> denotes explicit projection, <span style='color:purple'>purple</span> represents LLM components and <span style='color:orange'>orange</span> represents the LLM output.
+        </h4>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-six-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Traditional multimodal learning approaches require expensive alignment pre-training to bridge vision and language modalities, typically projecting visual features into discrete text token spaces. We challenge both fundamental assumptions underlying this paradigm by proposing Inverse-LLaVA, a novel approach that eliminates alignment pre-training entirely while inverting the conventional mapping direction. Rather than projecting visual features to text space, our method maps text embeddings into continuous visual representation space and performs fusion within transformer intermediate layers. Through selective additive components in attention mechanisms, we enable dynamic integration of visual and textual representations without requiring massive image-text alignment datasets. Comprehensive experiments across nine multimodal benchmarks demonstrate nuanced performance trade-offs: Inverse-LLaVA achieves notable improvements on reasoning-intensive and cognitive tasks (MM-VET: +0.2%, VizWiz: +1.8%, ScienceQA: +0.2%, cognitive reasoning: +27.2%), while showing expected decreases in perception tasks requiring memorized visual-text associations (celebrity recognition: -49.5%, OCR: -21.3%). These results provide the first empirical evidence that alignment pre-training is not necessary for effective multimodal learning, particularly for complex reasoning tasks. Our work establishes the feasibility of a new paradigm that reduces computational requirements by 45%, challenges conventional wisdom about modality fusion, and opens new research directions for efficient multimodal architectures that preserve modality-specific characteristics.
+           </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths">
+                <h2 class="title is-3">Architecture</h2>
+            </div>
+        </div>
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <img id="teaser" width="100%" src="static/images/Inverse_llava_structure_illustration-2.png">
+                <div class="content has-text-justified">
+                    <p>
+                        Architecture comparison between LLaVA and Inverse-LLaVA. LLaVA employs a two-stage training approach with alignment pretraining followed by instruction fine-tuning, where vision and text tokens are concatenated before being fed to the LLM. In contrast, Inverse-LLaVA uses single-stage training with text-guided visual fusion in intermediate layers, where vision information is integrated through learnable text-to-vision projections and combined with original hidden states via residual connections.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths">
+                <h2 class="title is-3">Results</h2>
+            </div>
+        </div>
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <h3 class="title is-4">Visual Information Preservation Through Inverse Mapping</h3>
+                <p class="content has-text-justified">
+                    Table 1 demonstrates that our inverse mapping approach achieves competitive performance across nine vision-language benchmarks while fundamentally rethinking how modalities interact. Unlike conventional methods that compress visual features to match text distributions, we project text embeddings into the richer visual space, preserving spatial relationships and fine-grained visual details.
+                    The results reveal selective advantages: Inverse-LLaVA outperforms LLaVA-1.5 on MM-VET (31.2 vs 31.1), VizWiz (50.95 vs 50.0), and notably on ScienceQA-IMG (67.84 vs 66.80). However, we observe consistent degradation on tasks requiring precise visual-text alignment, including TextVQA (52.02 vs 58.2) and GQA (58.46 vs 62.0). This performance pattern suggests our approach excels at reasoning tasks while struggling with direct visual-linguistic correspondence.
+                </p>
+                <table class="table is-striped is-fullwidth">
+                    <caption><b>Table 1: Performance comparison of vision-language models using Vicuna-7B as the backbone LLM across multiple vision-language benchmarks.</b> We evaluate models on MM-VET; VizWiz; SQA-IMG; MMBench; MMBench-CN; MME-Perception; VQA-v2; TextVQA; GQA. <b>Bold</b> indicates the best performance and <u>underlined</u> indicates the second-best performance in each benchmark. "-" denotes unreported results or experiments not conducted due to computational constraints.</caption>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>MM-VET</th>
+                            <th>VizWiz</th>
+                            <th>SQA-IMG</th>
+                            <th>MMB</th>
+                            <th>MMB-CN</th>
+                            <th>MME-p</th>
+                            <th>VQA-V2</th>
+                            <th>VQA-T</th>
+                            <th>GQA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>LLaVA-1.5</td>
+                            <td><u>31.1</u></td>
+                            <td>50.0</td>
+                            <td><u>66.80</u></td>
+                            <td><b>64.3</b></td>
+                            <td><b>58.3</b></td>
+                            <td><u>1510.7</u></td>
+                            <td><u>78.5</u></td>
+                            <td><b>58.2</b></td>
+                            <td><u>62.0</u></td>
+                        </tr>
+                        <tr>
+                            <td>InstructBLIP</td>
+                            <td>26.2</td>
+                            <td>34.5</td>
+                            <td>60.5</td>
+                            <td>36.0</td>
+                            <td>23.7</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>50.1</td>
+                            <td>49.2</td>
+                        </tr>
+                        <tr>
+                            <td>InternVL-Chat</td>
+                            <td>-</td>
+                            <td><b>52.5</b></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><b>1521.1</b></td>
+                            <td><b>79.3</b></td>
+                            <td><u>57.0</u></td>
+                            <td><b>62.9</b></td>
+                        </tr>
+                        <tr>
+                            <td>EVE-7B</td>
+                            <td>25.6</td>
+                            <td>41.8</td>
+                            <td>63.0</td>
+                            <td>49.5</td>
+                            <td>-</td>
+                            <td>1217.3</td>
+                            <td>75.4</td>
+                            <td>51.9</td>
+                            <td>60.8</td>
+                        </tr>
+                        <tr>
+                            <td>Inverse-LLaVA</td>
+                            <td><b>31.2</b></td>
+                            <td><u>50.95</u></td>
+                            <td><b>67.84</b></td>
+                            <td><u>54.55</u></td>
+                            <td><u>41.84</u></td>
+                            <td>1293.15</td>
+                            <td>74.76</td>
+                            <td>52.02</td>
+                            <td>58.46</td>
+                        </tr>
+                        <tr>
+                            <td>Inverse-LLaVA-HD</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>1335.67</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>59.33</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <table class="table is-striped is-fullwidth">
+                    <caption><b>Table 2: Training data comparison.</b> #Samples indicates the number of samples used in alignment pre-training and instruction fine-tuning stages respectively.</caption>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Alignment #Samples</th>
+                            <th>Finetune #Samples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>LLaVA-1.5</td>
+                            <td>558K</td>
+                            <td>665K</td>
+                        </tr>
+                        <tr>
+                            <td>InstructBLIP</td>
+                            <td>129M</td>
+                            <td>1.2M</td>
+                        </tr>
+                        <tr>
+                            <td>InternVL-Chat</td>
+                            <td>4.98B</td>
+                            <td>665K</td>
+                        </tr>
+                        <tr>
+                            <td>EVE-7B</td>
+                            <td>33M</td>
+                            <td>665K</td>
+                        </tr>
+                        <tr>
+                            <td>Inverse-LLaVA</td>
+                            <td>0</td>
+                            <td>665K</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <img id="teaser" width="100%" src="static/images/mme_benchmark_analysis.png">
+                <div class="content has-text-justified">
+                    <p>
+                        MME Benchmark Analysis comparing LLaVA-1.5-7B-LoRA, Inverse-LLaVA, and Inverse-LLaVA-HD across cognitive and perception tasks in the MME benchmark. Left (top): Cognitive tasks performance showing Inverse-LLaVA achieving superior performance in numerical calculation (+69%) and text translation (+125%) compared to the baseline LLaVA-1.5-7B-LoRA model. Right (top): Overall performance comparison. Bottom: Perception tasks evaluation shows that Inverse-LLaVA variants excel in Existence and Count tasks, with Inverse-LLaVA-HD achieving perfect performance on Existence tasks. However, significant performance drops in Celebrity recognition (-50%) and OCR tasks (-21%) primarily account for the overall perception score gap. The results indicate that inverse training maintains strong cognitive capabilities while showing task-specific effects on perception.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+@article{zhan2024inverse,
+  title={Inverse-LLaVA: Eliminating Alignment Pre-training Through Text-to-Vision Mapping},
+  author={Zhan, Xuhui and Derr, Tyler},
+  journal={arXiv preprint arXiv:2406.11832},
+  year={2024}
+}
+  </code></pre>
+    </div>
+  </section>
+
+  <section class="section" id="Acknowledgement">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Acknowledgement</h2>
+      <p>
+        This website is adapted from <a
+        href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+        Commons Attribution-ShareAlike 4.0 International License</a>.
+      </p>
+    </div>
+  </section>
+
+</body>
+
+</html>
