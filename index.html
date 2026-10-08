@@ -1,305 +1,526 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="Inverse-LLaVA: Rethinking Multimodal Alignment via Text-to-Vision Mapping">
-  <meta name="keywords" content="multimodal, llm, vlm">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inverse-LLaVA</title>
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/954/954591.png">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
-</head>
-
-<body>
-
-
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Inverse-LLaVA: Rethinking Multimodal Alignment via Text-to-Vision Mapping</h1>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="https://xuhuizhan5.github.io/" style="color:#f68946;font-weight:normal;">Xuhui Zhan</a>,
-              </span>
-              <span class="author-block">
-                <a href="https://www.tylerderr.com/" style="color:#008AD7;font-weight:normal;">Tyler Derr</a>
-              </span>
-            </div>
-
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">Vanderbilt University</span>
-            </div>
-
-            <div class="column has-text-centered">
-              <div class="publication-links">
-                <span class="link-block">
-                  <a href="https://arxiv.org/abs/2508.12466" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                    </span>
-                    <span>Paper</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a href="https://github.com/xuhuizhan5/Inverse-LLaVA" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
-                    <span>Code</span>
-                  </a>
-                </span>
-              </div>
-            </div>
-          </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Inverse-LLaVA: single-stage text-to-vision fusion. Released 7B weights, nine-benchmark evaluations, and reproducible research artifacts."
+    />
+    <meta
+      property="og:title"
+      content="Inverse-LLaVA: Rethinking Multimodal Alignment via Text-to-Vision Mapping"
+    />
+    <meta
+      property="og:description"
+      content="A single-stage 7B vision-language model. Open weights, verified evaluations, and research artifacts."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://inverse-llava.github.io/" />
+    <meta name="theme-color" content="#142e40" />
+    <link rel="canonical" href="https://inverse-llava.github.io/" />
+    <link
+      rel="icon"
+      href="static/images/inverse-llava-mark.svg"
+      type="image/svg+xml"
+    />
+    <link rel="stylesheet" href="static/css/index.css" />
+    <title>Inverse-LLaVA · Text-to-Vision Mapping</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="hero">
+      <img
+        class="wordmark"
+        src="static/images/inverse-llava-logo.svg"
+        alt="Inverse-LLaVA"
+        width="800"
+        height="220"
+      />
+      <h1>
+        Rethinking Multimodal Alignment<br class="wide-only" />
+        via Text-to-Vision Mapping
+      </h1>
+      <p class="authors">
+        <a href="https://xuhuizhan5.github.io/">Xuhui Zhan</a> ·
+        <a href="https://www.tylerderr.com/">Tyler Derr</a>
+      </p>
+      <p class="affiliation">Vanderbilt University</p>
+      <nav class="resource-links" aria-label="Project resources">
+        <a class="button" href="https://arxiv.org/abs/2508.12466">Paper</a>
+        <a class="button" href="https://github.com/xuhuizhan5/Inverse-LLaVA"
+          >Code</a
+        >
+        <a
+          class="button primary"
+          href="https://huggingface.co/xuhuizhan5/Inverse-LLaVA-7B"
+          >7B model</a
+        >
+        <a
+          class="button"
+          href="https://huggingface.co/xuhuizhan5/Inverse-LLaVA-research-artifacts"
+          >Research artifacts</a
+        >
+      </nav>
+      <p class="release-note">
+        Open weights and reproducible evaluations · Updated October 2026
+      </p>
+    </header>
+    <main id="main" class="container">
+      <section class="introduction" aria-labelledby="overview-title">
+        <h2 id="overview-title">
+          Text-to-vision fusion. One instruction-tuning stage.
+        </h2>
+        <p class="lead">
+          Inverse-LLaVA maps language features into visual feature space and
+          combines them with frozen CLIP features inside decoder attention. The
+          released 7B model learns multimodal interaction without a separate
+          alignment-pretraining stage.
+        </p>
+        <div class="facts" aria-label="Training and evaluation scope">
+          <p>
+            <strong>1 stage</strong><span>Joint fusion and LoRA training</span>
+          </p>
+          <p>
+            <strong>665K examples</strong
+            ><span>One instruction-tuning epoch</span>
+          </p>
+          <p>
+            <strong>9 benchmarks</strong
+            ><span>Official LoRA and FFT references</span>
+          </p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <img id="overview" width="100%" src="static/images/overview.png" alt="Comparison of the LLaVA and Inverse-LLaVA information flows on an MME benchmark example.">
-        <h4 class="subtitle has-text-centered">
-            High-level overview of the proposed Inverse-LLaVA framework on an MME benchmark example. (a) LLaVA projects visual features into discrete text space via an explicit projection (red), requiring alignment pre-training, and produces the wrong answer ("Yes"). (b) Inverse-LLaVA maps text embeddings into continuous vision space for fusion, eliminating alignment pre-training, and yields the correct answer ("No"). <span style="color:blue">Blue</span> indicates vision flow, <span style="color:green">green</span> indicates text flow, <span style="color:red">red</span> denotes explicit projection, <span style="color:purple">purple</span> represents LLM components, and <span style="color:orange">orange</span> indicates LLM output.
-        </h4>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <!-- Abstract. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-six-fifths">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
+        <figure>
+          <a
+            class="figure-link"
+            href="static/images/overview.svg"
+            aria-label="Open the overview figure at full resolution"
+            ><img
+              src="static/images/overview.svg"
+              alt="A shared VizWiz photograph and question, What color is it?, follow the two feature paths. Inverse-LLaVA answers White; both official LLaVA references answer Blue."
+              width="1400"
+              height="610"
+              fetchpriority="high"
+          /></a>
+          <figcaption>
+            <strong>Two directions of multimodal mapping.</strong> The image,
+            question, and answers come from the saved VizWiz evaluation:
+            <code>VizWiz_test_00006540.jpg</code>. This selected example
+            illustrates the interface, not overall accuracy. Reference: White,
+            with full consensus credit (1). Image and question:
+            <a href="https://vizwiz.org/tasks-and-datasets/vqa/">VizWiz-VQA</a>,
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a
+            >. <a href="static/images/overview.json">Example provenance</a>.
+          </figcaption>
+        </figure>
+      </section>
+      <section id="method" aria-labelledby="method-title">
+        <h2 id="method-title">Architecture</h2>
+        <p>
+          LLaVA projects visual features into the language model's continuous
+          hidden space. Inverse-LLaVA instead introduces text-to-vision branches
+          in the decoder's query, key, and value projections. Each branch maps
+          language states to the visual feature width, concatenates them with
+          normalized CLIP features at the corresponding sequence positions, and
+          adds a learned update to the attention projection.
+        </p>
+        <figure>
+          <a
+            class="figure-link"
+            href="static/images/architecture.svg"
+            aria-label="Open the architecture figure at full resolution"
+            ><img
+              src="static/images/architecture.svg"
+              alt="LLaVA-1.5 alignment and instruction stages alongside Inverse-LLaVA's single-stage Q, K, and V fusion branches. Frozen backbones and trainable adapters are identified."
+              width="1200"
+              height="810"
+              loading="lazy"
+          /></a>
+          <figcaption>
+            <strong>Released 7B configuration.</strong> Vicuna-7B-v1.5 and CLIP
+            ViT-L/14 at 336 pixels; final-layer CLIP patch features (1,024
+            channels); fusion at decoder layer 0. The backbones remain frozen
+            while fusion parameters and LoRA adapters outside the fusion layer
+            train jointly. All decoder layers are retained.
+            <a
+              href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/method/METHOD_CONTRACT.md"
+              >Architecture and tensor shapes</a
+            >.
+          </figcaption>
+        </figure>
+      </section>
+      <section id="results" aria-labelledby="results-title">
+        <h2 id="results-title">Results from the released 7B checkpoint</h2>
+        <p>
+          Complete evaluations compare Inverse-LLaVA with the official
+          LLaVA-1.5-7B LoRA and full-fine-tuning (FFT) checkpoints under shared
+          task protocols. Their training data, adaptation procedures, and CLIP
+          feature layers differ. Separate single-stage controls address those
+          training differences.
+        </p>
+        <div
+          class="table-scroll"
+          role="region"
+          aria-label="Released-model benchmark comparison"
+          tabindex="0"
+        >
+          <table id="benchmark-results">
+            <caption>
+              Nine primary benchmarks, with MME perception and cognition shown
+              separately. Higher is better. Values are percentages except MME's
+              official scores.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Benchmark</th>
+                <th scope="col" class="ours">Inverse-LLaVA</th>
+                <th scope="col">LLaVA-LoRA</th>
+                <th scope="col">LLaVA-FFT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">VQAv2 test-dev</th>
+                <td class="ours">78.45</td>
+                <td><strong>79.13</strong></td>
+                <td><span class="second">78.55</span></td>
+              </tr>
+              <tr>
+                <th scope="row">GQA balanced test-dev</th>
+                <td class="ours"><span class="second">62.28</span></td>
+                <td><strong>62.63</strong></td>
+                <td>61.89</td>
+              </tr>
+              <tr>
+                <th scope="row">VizWiz test</th>
+                <td class="ours"><strong>50.96</strong></td>
+                <td>48.56</td>
+                <td><span class="second">50.64</span></td>
+              </tr>
+              <tr>
+                <th scope="row">ScienceQA-IMG</th>
+                <td class="ours"><strong>69.61</strong></td>
+                <td>68.82</td>
+                <td><span class="second">69.11</span></td>
+              </tr>
+              <tr>
+                <th scope="row">TextVQA validation</th>
+                <td class="ours">56.96</td>
+                <td><strong>58.47</strong></td>
+                <td><span class="second">58.21</span></td>
+              </tr>
+              <tr>
+                <th scope="row">MMBench EN dev</th>
+                <td class="ours">62.63</td>
+                <td><strong>67.10</strong></td>
+                <td><span class="second">65.12</span></td>
+              </tr>
+              <tr>
+                <th scope="row">MMBench CN dev</th>
+                <td class="ours">54.04</td>
+                <td><strong>58.93</strong></td>
+                <td><span class="second">58.33</span></td>
+              </tr>
+              <tr>
+                <th scope="row">MME perception</th>
+                <td class="ours">1453.82</td>
+                <td><span class="second">1484.58</span></td>
+                <td><strong>1507.28</strong></td>
+              </tr>
+              <tr>
+                <th scope="row">MME cognition</th>
+                <td class="ours"><span class="second">279.29</span></td>
+                <td>258.21</td>
+                <td><strong>344.64</strong></td>
+              </tr>
+              <tr>
+                <th scope="row">MM-Vet v1</th>
+                <td class="ours">28.67</td>
+                <td><strong>31.24</strong></td>
+                <td><span class="second">29.68</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <strong>Bold</strong> and <span class="second">underline</span> mark
+          the highest and second-highest point estimates, not statistical
+          significance. Shading identifies Inverse-LLaVA. VQAv2 uses official
+          server scoring; MM-Vet uses the hosted GPT-4.1 judge.
+          <a
+            href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/evaluation.md"
+            >Splits, prompts, and scorers</a
+          >
+          ·
+          <a
+            href="https://huggingface.co/xuhuizhan5/Inverse-LLaVA-research-artifacts/tree/main/evaluations"
+            >Saved answers and scores</a
+          >.
+        </p>
+        <p>
+          Without the additional alignment stage, Inverse-LLaVA reaches 78.45%
+          on VQAv2 and 62.28% on GQA. VizWiz exceeds LoRA by 2.40 percentage
+          points (95% paired interval: 1.58 to 3.21). The smaller VizWiz
+          difference from FFT and the ScienceQA differences have intervals
+          spanning zero. TextVQA and MMBench remain lower; MME cognition is
+          above LoRA's point score and below FFT's. Intervals condition on these
+          trained checkpoints and do not measure training-seed variation.
+        </p>
+        <details>
+          <summary>
+            Published reference scores and broader model context
+          </summary>
+          <p>
+            These LLaVA-1.5 values are from the
+            <a
+              href="https://github.com/haotian-liu/LLaVA/blob/main/docs/MODEL_ZOO.md"
+              >official model zoo</a
+            >. They remain separate from the evaluations above because source
+            protocols and judges can differ.
+          </p>
+          <div
+            class="table-scroll"
+            role="region"
+            aria-label="Published LLaVA reference scores"
+            tabindex="0"
+          >
+            <table>
+              <caption>
+                Originally published LLaVA-1.5-7B results.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Benchmark</th>
+                  <th scope="col">LoRA</th>
+                  <th scope="col">FFT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">VQAv2</th>
+                  <td>79.1</td>
+                  <td>78.5</td>
+                </tr>
+                <tr>
+                  <th scope="row">GQA</th>
+                  <td>63.0</td>
+                  <td>62.0</td>
+                </tr>
+                <tr>
+                  <th scope="row">VizWiz</th>
+                  <td>47.8</td>
+                  <td>50.0</td>
+                </tr>
+                <tr>
+                  <th scope="row">ScienceQA-IMG</th>
+                  <td>68.4</td>
+                  <td>66.8</td>
+                </tr>
+                <tr>
+                  <th scope="row">TextVQA</th>
+                  <td>58.2</td>
+                  <td>58.2</td>
+                </tr>
+                <tr>
+                  <th scope="row">MMBench EN</th>
+                  <td>66.1</td>
+                  <td>64.3</td>
+                </tr>
+                <tr>
+                  <th scope="row">MMBench CN</th>
+                  <td>58.9</td>
+                  <td>58.3</td>
+                </tr>
+                <tr>
+                  <th scope="row">MME perception</th>
+                  <td>1476.9</td>
+                  <td>1510.7</td>
+                </tr>
+                <tr>
+                  <th scope="row">MM-Vet</th>
+                  <td>30.2</td>
+                  <td>31.1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Related systems include InstructBLIP, InternVL-Chat, EVE, and the
+            <a href="https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct"
+              >Qwen-VL family</a
+            >. They use different connectors, visual encoders or resolutions,
+            and supervision. Their published scores are not training-matched
+            measurements of the inverse-mapping contribution.
+          </p>
+        </details>
+      </section>
+      <section id="training" aria-labelledby="training-title">
+        <h2 id="training-title">A smaller multimodal training recipe</h2>
+        <div
+          class="table-scroll"
+          role="region"
+          aria-label="Task-training data comparison"
+          tabindex="0"
+        >
+          <table>
+            <caption>
+              Task-training examples; pretrained backbone data are excluded.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Recipe</th>
+                <th scope="col">Alignment stage</th>
+                <th scope="col">Instruction stage</th>
+                <th scope="col">Combined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">LLaVA-1.5</th>
+                <td>558K</td>
+                <td>665K</td>
+                <td>1,223K</td>
+              </tr>
+              <tr class="ours">
+                <th scope="row">Inverse-LLaVA</th>
+                <td>0</td>
+                <td>665K</td>
+                <td>665K</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          This removes 45.6% of the task-training examples in LLaVA-1.5's
+          two-stage recipe. The released model trains for one epoch on 665,298
+          mixture rows, including text-only examples. Alignment and instruction
+          examples have different costs, and fusion adds computation: the sample
+          reduction is not a measured 45.6% runtime or FLOP saving.
+          <a
+            href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/training.md"
+            >Training recipe</a
+          >
+          ·
+          <a
+            href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/guides/PROFILING.md"
+            >Profiling procedure</a
+          >.
+        </p>
+      </section>
+      <section id="analysis" aria-labelledby="analysis-title">
+        <h2 id="analysis-title">What the additional studies examine</h2>
+        <div class="study-grid">
+          <article>
+            <h3>Fusion and supervision</h3>
             <p>
-              Traditional multimodal learning approaches rely on alignment pre-training to bridge vision and language modalities, typically by projecting visual features into discrete text token spaces using large-scale image–text data. We revisit this design choice and propose <strong>Inverse-LLaVA</strong>, a multimodal architecture that inverts the conventional mapping direction by projecting text embeddings into continuous visual representation space and performing fusion within intermediate transformer layers. This representation-first design enables effective multimodal reasoning without relying on an explicit alignment pretraining stage and significantly reduces dependence on large alignment datasets. Across nine multimodal benchmarks, Inverse-LLaVA demonstrates strong learning efficiency under reduced supervision, achieving substantial gains on reasoning-intensive tasks while exhibiting selective performance drops on perception tasks that depend on explicit visual–text grounding. Our analysis indicates that these trade-offs primarily reflect differences in supervision regime rather than architectural limitations. Together, these results show that alignment pretraining is not strictly required for effective multimodal reasoning and highlight the importance of preserving continuous modality representations, opening a new direction for multimodal architecture design that decouples representation structure from supervision regime for more flexible and efficient multimodal systems.
-           </p>
-          </div>
+              Component, fusion-depth, feature-layer, and single-stage projector
+              controls isolate design choices. Continued-training studies test
+              paired data and instruction replay. Caption-only continuation does
+              not establish TextVQA recovery; effects depend on the task and
+              supervision.
+            </p>
+          </article>
+          <article>
+            <h3>Representations</h3>
+            <p>
+              Features from the same 100 distinct image/prompt pairs support
+              PCA, t-SNE, CKA, and pairwise geometry analysis. Matched image
+              interventions test sensitivity. Independently fitted projection
+              panels do not share coordinates.
+            </p>
+          </article>
+          <article>
+            <h3>Scaling studies</h3>
+            <p>
+              Inverse-LLaVA-HD concatenates final and penultimate CLIP features
+              into 2,048 channels. The 13B variant uses a larger language
+              backbone. Both released variants use a matched 5% instruction
+              subset with intermediate checkpoints; neither is a full-data model
+              or a fitted scaling law.
+            </p>
+          </article>
         </div>
-      </div>
-    </div>
-  </section>
+        <p>
+          <a
+            href="https://huggingface.co/xuhuizhan5/Inverse-LLaVA-research-artifacts"
+            >Checkpoints, training histories, and feature tensors</a
+          >
+          ·
+          <a
+            href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/analysis.md"
+            >Analysis instructions</a
+          >.
+        </p>
+      </section>
+      <section id="use" aria-labelledby="use-title">
+        <h2 id="use-title">Try the released model</h2>
+        <p>
+          Install the
+          <a href="https://github.com/xuhuizhan5/Inverse-LLaVA#installation"
+            >source package</a
+          >
+          in a CUDA-compatible environment, then load the verified 7B snapshot:
+        </p>
+        <pre
+          tabindex="0"
+          role="region"
+          aria-label="Model loading example"
+        ><code>from invllava.release import load_pretrained
 
-  <section class="section">
-    <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-            <div class="column is-six-fifths">
-                <h2 class="title is-3">Architecture</h2>
-            </div>
-        </div>
-        <div class="columns is-centered">
-            <div class="column is-full-width">
-                <img class="paper-figure" width="100%" src="static/images/Inverse_llava_structure_illustration.png" alt="Architecture and training comparison between LLaVA and Inverse-LLaVA.">
-                <div class="content has-text-justified">
-                    <p>
-                        <strong>Architecture comparison between LLaVA and Inverse-LLaVA.</strong> LLaVA employs a two-stage training approach with alignment pre-training followed by instruction fine-tuning, where vision and text tokens are concatenated before being fed to the LLM. In contrast, Inverse-LLaVA uses single-stage training with text-guided visual fusion in intermediate layers, where vision information is integrated through learnable text-to-vision projections and combined with original hidden states via residual connections. Fire icons denote trainable components, while snowflake icons denote frozen components.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-            <div class="column is-six-fifths">
-                <h2 class="title is-3">Results</h2>
-            </div>
-        </div>
-        <div class="columns is-centered">
-            <div class="column is-full-width">
-                <h3 class="title is-4">Visual Information Preservation Through Inverse Mapping</h3>
-                <p class="content has-text-justified">
-                    Table 1 shows that the inverse mapping strategy achieves competitive performance across nine vision–language benchmarks while fundamentally rethinking cross-modal interaction. Rather than compressing visual features to conform to the discrete structure of text tokens, our method projects textual embeddings into the visual feature space. This design preserves spatial structure and fine-grained visual information that may otherwise be lost during discretization.
-                    The results reveal advantages: Inverse-LLaVA outperforms LLaVA-1.5 on MM-VET (31.2 vs 31.1), VizWiz (50.95 vs 50.0), and ScienceQA-IMG (67.84 vs 66.80). However, we observe consistent degradation on tasks requiring precise visual–text alignment, including TextVQA (52.02 vs 58.2) and GQA (58.46 vs 62.0). This performance pattern suggests our approach excels at reasoning tasks while struggling with direct visual–linguistic correspondence.
-                </p>
-                <table class="table is-striped is-fullwidth">
-                    <caption><b>Table 1: Performance comparison of vision-language models using Vicuna-7B as the backbone LLM across multiple vision-language benchmarks.</b> We evaluate models on MM-VET; VizWiz; SQA<sup>I</sup>: ScienceQA-IMG; MMB: MMBench; MMB<sup>CN</sup>: MMBench-CN; MME<sup>p</sup>: MME-Perception; VQA<sup>V2</sup>: VQA-v2; VQA<sup>T</sup>: TextVQA; and GQA. <b>Bold</b> indicates the best performance and <u>underlined</u> indicates the second-best performance in each benchmark. "-" denotes unreported results or experiments not conducted due to computational constraints.</caption>
-                    <thead>
-                        <tr>
-                            <th>Model</th>
-                            <th>MM-VET</th>
-                            <th>VizWiz</th>
-                            <th>SQA-IMG</th>
-                            <th>MMB</th>
-                            <th>MMB-CN</th>
-                            <th>MME-p</th>
-                            <th>VQA-V2</th>
-                            <th>VQA-T</th>
-                            <th>GQA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>LLaVA-1.5</td>
-                            <td><u>31.1</u></td>
-                            <td>50.0</td>
-                            <td><u>66.80</u></td>
-                            <td><b>64.3</b></td>
-                            <td><b>58.3</b></td>
-                            <td><u>1510.7</u></td>
-                            <td><u>78.5</u></td>
-                            <td><b>58.2</b></td>
-                            <td><u>62.0</u></td>
-                        </tr>
-                        <tr>
-                            <td>InstructBLIP</td>
-                            <td>26.2</td>
-                            <td>34.5</td>
-                            <td>60.5</td>
-                            <td>36.0</td>
-                            <td>23.7</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>50.1</td>
-                            <td>49.2</td>
-                        </tr>
-                        <tr>
-                            <td>InternVL-Chat</td>
-                            <td>-</td>
-                            <td><b>52.5</b></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><b>1521.1</b></td>
-                            <td><b>79.3</b></td>
-                            <td><u>57.0</u></td>
-                            <td><b>62.9</b></td>
-                        </tr>
-                        <tr>
-                            <td>EVE-7B</td>
-                            <td>25.6</td>
-                            <td>41.8</td>
-                            <td>63.0</td>
-                            <td>49.5</td>
-                            <td>-</td>
-                            <td>1217.3</td>
-                            <td>75.4</td>
-                            <td>51.9</td>
-                            <td>60.8</td>
-                        </tr>
-                        <tr>
-                            <td>Inverse-LLaVA (Ours)</td>
-                            <td><b>31.2</b></td>
-                            <td><u>50.95</u></td>
-                            <td><b>67.84</b></td>
-                            <td><u>54.55</u></td>
-                            <td><u>41.84</u></td>
-                            <td>1293.15</td>
-                            <td>74.76</td>
-                            <td>52.02</td>
-                            <td>58.46</td>
-                        </tr>
-                        <tr>
-                            <td>Inverse-LLaVA-HD (Ours)</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>1335.67</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>59.33</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <table class="table is-striped is-fullwidth">
-                    <caption><b>Table 2: Training data usage comparison.</b> #Samples indicates the number of samples used in the alignment pre-training and instruction fine-tuning stages.</caption>
-                    <thead>
-                        <tr>
-                            <th>Model</th>
-                            <th>Alignment #Samples</th>
-                            <th>Finetune #Samples</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>LLaVA-1.5</td>
-                            <td>558K</td>
-                            <td>665K</td>
-                        </tr>
-                        <tr>
-                            <td>InstructBLIP</td>
-                            <td>129M</td>
-                            <td>1.2M</td>
-                        </tr>
-                        <tr>
-                            <td>InternVL-Chat</td>
-                            <td>4.98B</td>
-                            <td>665K</td>
-                        </tr>
-                        <tr>
-                            <td>EVE-7B</td>
-                            <td>33M</td>
-                            <td>665K</td>
-                        </tr>
-                        <tr>
-                            <td>Inverse-LLaVA (Ours)</td>
-                            <td>0</td>
-                            <td>665K</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <img class="paper-figure" width="100%" src="static/images/mme_benchmark_analysis.png" alt="MME cognitive, overall, and perception task results for LLaVA-1.5 and Inverse-LLaVA variants.">
-                <div class="content has-text-justified">
-                    <p>
-                        <strong>MME benchmark analysis</strong> comparing LLaVA-1.5-7B-LoRA, Inverse-LLaVA, and Inverse-LLaVA-HD across cognitive and perception tasks in the MME benchmark. <strong>(A)</strong> Cognitive task performance, where Inverse-LLaVA outperforms the baseline in numerical calculation (+69%) and text translation (+125%). <strong>(B)</strong> Overall performance comparison. <strong>(C)</strong> Perception task evaluation, showing strong performance of Inverse-LLaVA variants on Existence and Count tasks, with Inverse-LLaVA-HD achieving perfect Existence scores. Performance drops in Celebrity recognition (-50%) and OCR (-21%) account for most of the overall perception gap. Overall, inverse training preserves cognitive performance while exhibiting task-specific effects on perception.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-  </section>
-
-
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>
-@article{zhan2025inverse,
+model = load_pretrained(
+    "xuhuizhan5/Inverse-LLaVA-7B",
+    revision="d2ec3d3b27b61ccc08ea1677ad63132f1400307c",
+    cache_dir="/workspace/cache",
+)
+print(model.answer("image.jpg", "What is shown in this image?"))</code></pre>
+        <p>
+          The 695 MB download contains learned fusion and LoRA weights. The
+          loader verifies checksums and retrieves pinned Vicuna and CLIP
+          backbones separately, so allow storage and GPU memory for the complete
+          model. Fresh-download inference was verified; all 33 local comparison
+          cells reproduce from exported answers. VQAv2 and MM-Vet retain
+          external scoring.
+          <a
+            href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/docs/checkpoints.md"
+            >Offline use and checkpoint formats</a
+          >.
+        </p>
+        <p class="table-note">
+          Code: Apache-2.0. Model weights: Llama 2 Community License and
+          applicable upstream terms. Dataset assets retain their source
+          licenses. Generated answers may contain errors or biases.
+        </p>
+      </section>
+      <section id="BibTeX" aria-labelledby="citation-title">
+        <h2 id="citation-title">Citation</h2>
+        <pre
+          tabindex="0"
+          role="region"
+          aria-label="BibTeX citation"
+        ><code>@article{zhan2025inverse,
   title={Inverse-LLaVA: Rethinking Multimodal Alignment via Text-to-Vision Mapping},
   author={Zhan, Xuhui and Derr, Tyler},
   journal={arXiv preprint arXiv:2508.12466},
   year={2025}
-}
-  </code></pre>
-    </div>
-  </section>
-
-  <section class="section" id="Acknowledgement">
-    <div class="container is-max-desktop content">
-      <h2 class="title">Acknowledgement</h2>
+}</code></pre>
+        <p class="table-note">
+          Results on this page correspond to the released checkpoint and
+          evaluation records. The paper is available as an arXiv preprint.
+        </p>
+      </section>
+    </main>
+    <footer class="container">
       <p>
-        This website is adapted from <a
-        href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-        Commons Attribution-ShareAlike 4.0 International License</a>.
+        Project by Xuhui Zhan and Tyler Derr. Original website adapted from
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> under
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/"
+          >CC BY-SA 4.0</a
+        >.
+        <a
+          href="https://github.com/xuhuizhan5/Inverse-LLaVA/blob/main/assets/README.md"
+          >Artwork attribution and example provenance</a
+        >.
       </p>
-    </div>
-  </section>
-
-</body>
-
+    </footer>
+  </body>
 </html>
